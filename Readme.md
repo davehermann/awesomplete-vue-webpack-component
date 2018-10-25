@@ -2,7 +2,8 @@
 Awesomplete wrapper for Vue and webpack
 
 *AVWC* is an Awesomplete VueJS wrapper component that assumes webpack bundling.
-It uses a Promise-based data source allowing developer flexibility for source implementation, and it supports setting/overriding Awesomplete properties.
+*AVWC* uses a Promise-based data source allowing developer flexibility for source implementation, and supports setting/overriding Awesomplete properties.
+*AVWC* also has a couple of additional features over core Awesomplete.
 
 ## Getting Started
 
@@ -16,6 +17,9 @@ Vue.component("avwc", AVWC);
 ```
 
 ### Webpack configuration must include vue-, style-, and css- loaders
+
+*AVWC* uses single-file component (.vue) design, and automatically imports the Awesomplete CSS
+
 ```
 {
     module: {
@@ -68,3 +72,5 @@ Vue.component("avwc", AVWC);
     + **Default: 200ms**
 + ```v-bind:sort```
     + Awesomplete's *sort*
++ ```striped```
+    + Add a "striped" CSS class to Awesomplete with a default color scheme
