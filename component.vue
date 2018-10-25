@@ -12,7 +12,7 @@
 
     export default {
         // fillList MUST return a promise with an availableOptions array (see below)
-        props: ["autoFirst", "fillList", "maxItems", "minChars", "msThrottle", "sort", "striped"],
+        props: ["autoFirst", "class", "container", "fillList", "maxItems", "minChars", "msThrottle", "sort", "striped"],
 
         data: () => {
             return {
@@ -51,12 +51,20 @@
                 this.autocompleteObject = new awesomplete(codeInput, {
                     autoFirst: this.autoFirst,
                     container: (inputElement) => {
-                        let elContainer = document.createElement("div");
-                        elContainer.className = "awesomplete" + (this.striped !== undefined ? " striped" : "");
-                        inputElement.parentNode.insertBefore(elContainer, inputElement);
-                        elContainer.appendChild(inputElement);
+                        if (!!this.container)
+                            return this.container(inputElement);
+                        else {
+                            let elContainer = document.createElement("div");
+                            elContainer.className = "awesomplete";
+                            if (this.striped !== undefined)
+                                elContainer.className += " striped";
+                            if (!!this.class)
+                                elContainer.className += " " + this.class;
+                            inputElement.parentNode.insertBefore(elContainer, inputElement);
+                            elContainer.appendChild(inputElement);
 
-                        return elContainer;
+                            return elContainer;
+                        }
                     },
                     minChars: this.minimumSearchLength,
                     maxItems: this.maximumDisplayItems,

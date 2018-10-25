@@ -61,6 +61,11 @@ Vue.component("avwc", AVWC);
 
 + ```v-bind:auto-first```
     + Awesomplete's *autoFirst* property
++ ```v-bind:container```
+    + Override Awesomplete's *container* function
+    + By default, *AVWC* overrides the function to add CSS classes
++ ```class```
+    + Specify CSS classes to add to Awesomplete
 + ```v-bind:max-items```
     + Awesomplete's *maxItems* property
 + ```v-bind:min-chars```
