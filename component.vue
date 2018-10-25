@@ -12,7 +12,7 @@
 
     export default {
         // fillList MUST return a promise with an availableOptions array (see below)
-        props: ["autoFirst", "class", "container", "fillList", "maxItems", "minChars", "msThrottle", "sort", "striped"],
+        props: ["autoFirst", "cssClass", "container", "fillList", "item", "maxItems", "minChars", "msThrottle", "sort", "striped"],
 
         data: () => {
             return {
@@ -48,7 +48,7 @@
             ActivateAutocomplete () {
                 let codeInput = this.$refs.awesomplete;
 
-                this.autocompleteObject = new awesomplete(codeInput, {
+                let initializationOptions = {
                     autoFirst: this.autoFirst,
                     container: (inputElement) => {
                         if (!!this.container)
@@ -58,8 +58,8 @@
                             elContainer.className = "awesomplete";
                             if (this.striped !== undefined)
                                 elContainer.className += " striped";
-                            if (!!this.class)
-                                elContainer.className += " " + this.class;
+                            if (!!this.cssClass)
+                                elContainer.className += " " + this.cssClass;
                             inputElement.parentNode.insertBefore(elContainer, inputElement);
                             elContainer.appendChild(inputElement);
 
@@ -69,7 +69,11 @@
                     minChars: this.minimumSearchLength,
                     maxItems: this.maximumDisplayItems,
                     sort: this.sort,
-                });
+                };
+                if (!!this.item)
+                    initializationOptions.item = this.item;
+
+                this.autocompleteObject = new awesomplete(codeInput, initializationOptions);
                 codeInput.addEventListener("awesomplete-select", (evt) => {
                     evt.preventDefault();
 
