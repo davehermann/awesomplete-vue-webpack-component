@@ -7,15 +7,12 @@
     import "awesomplete/awesomplete.css";
 
     const TYPING_DELAY = 200,
+        MAXIMUM_ITEMS_TO_DISPLAY = 10,
         MINIMUM_SEARCH_STRING_LENGTH = 2;
-
-    function alphabeticalSort(a, b) {
-        return a.label < b.label ? -1 : 1;
-    }
 
     export default {
         // fillList MUST return a promise with an availableOptions array (see below)
-        props: ["fillList", "minLength", "msThrottle", "sort"],
+        props: ["autoFirst", "fillList", "maxItems", "minChars", "msThrottle", "sort"],
 
         data: () => {
             return {
@@ -31,8 +28,12 @@
                 return this.msThrottle || TYPING_DELAY;
             },
 
+            maximumDisplayItems () {
+                return this.maxItems || MAXIMUM_ITEMS_TO_DISPLAY;
+            },
+
             minimumSearchLength () {
-                return this.minLength || MINIMUM_SEARCH_STRING_LENGTH;
+                return this.minChars || MINIMUM_SEARCH_STRING_LENGTH;
             },
 
             placeholder () {
@@ -48,9 +49,10 @@
                 let codeInput = this.$refs.awesomplete;
 
                 this.autocompleteObject = new awesomplete(codeInput, {
-                    minChars: 1,
-                    maxItems: 11,
-                    sort: ((this.sort !== undefined) && (this.sort !== null)) ? this.sort : alphabeticalSort,
+                    autoFirst: this.autoFirst,
+                    minChars: this.minimumSearchLength,
+                    maxItems: this.maximumDisplayItems,
+                    sort: this.sort,
                 });
                 codeInput.addEventListener("awesomplete-select", (evt) => {
                     evt.preventDefault();

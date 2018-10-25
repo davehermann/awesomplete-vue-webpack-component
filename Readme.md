@@ -55,6 +55,16 @@ Vue.component("avwc", AVWC);
 
 ### Optional
 
-+ ```v-bind:min-length```
++ ```v-bind:auto-first```
+    + Awesomplete's *autoFirst* property
++ ```v-bind:max-items```
+    + Awesomplete's *maxItems* property
++ ```v-bind:min-chars```
+    + A re-implementation of Awesomplete's *minChars* property
+    + The implementation ensures that the call to the data source Promise will not fire unless the minimum character length has been met
+    + **Default: 2**
 + ```v-bind:ms-throttle```
+    + Implements a delay for the call to the data source Promise to ensure that it doesn't fire too frequently while a user is still entering the search term
+    + **Default: 200ms**
 + ```v-bind:sort```
+    + Awesomplete's *sort*
