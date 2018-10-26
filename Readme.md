@@ -63,7 +63,6 @@ Vue.component("avwc", AVWC);
     + Awesomplete's *autoFirst* property
 + ```v-bind:container```
     + Override Awesomplete's *container* function
-    + By default, *AVWC* overrides the function to add CSS classes
 + ```cssClass```
     + Specify CSS classes (string value) to add to Awesomplete
 + ```v-bind:item```
@@ -86,3 +85,7 @@ Vue.component("avwc", AVWC);
 
 + ```@selected```
     + Fires on the ```awesomplete-select``` event, and provides the value of the selected element
+
+## Styling
++ *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class
++ The input element has an ```.avwc-entry``` class

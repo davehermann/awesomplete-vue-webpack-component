@@ -1,5 +1,7 @@
 <template>
-    <input class="awesomplete-entry" ref="awesomplete" v-model="autocompleteText" :placeholder="placeholder" />
+    <span class="avwc-container" :class="cssClasses">
+        <input class="avwc-entry" ref="awesomplete" v-model="autocompleteText" :placeholder="placeholder" />
+    </span>
 </template>
 
 <script>
@@ -28,6 +30,17 @@
                 return this.msThrottle || TYPING_DELAY;
             },
 
+            cssClasses () {
+                let css = {
+                    striped: ((this.striped !== undefined) && (this.striped !== false))
+                };
+
+                if (!!this.cssClass)
+                    css[this.cssClass] = true;
+
+                return css;
+            },
+
             maximumDisplayItems () {
                 return this.maxItems || MAXIMUM_ITEMS_TO_DISPLAY;
             },
@@ -50,26 +63,12 @@
 
                 let initializationOptions = {
                     autoFirst: this.autoFirst,
-                    container: (inputElement) => {
-                        if (!!this.container)
-                            return this.container(inputElement);
-                        else {
-                            let elContainer = document.createElement("div");
-                            elContainer.className = "awesomplete";
-                            if (this.striped !== undefined)
-                                elContainer.className += " striped";
-                            if (!!this.cssClass)
-                                elContainer.className += " " + this.cssClass;
-                            inputElement.parentNode.insertBefore(elContainer, inputElement);
-                            elContainer.appendChild(inputElement);
-
-                            return elContainer;
-                        }
-                    },
                     minChars: this.minimumSearchLength,
                     maxItems: this.maximumDisplayItems,
                     sort: this.sort,
                 };
+                if (!!this.container)
+                    initializationOptions.container = this.container;
                 if (!!this.item)
                     initializationOptions.item = this.item;
 
@@ -125,10 +124,6 @@
 </script>
 
 <style scoped>
-    input.awesomplete-entry { min-width: 20em; }
-</style>
-
-<style>
-    .awesomplete.striped > ul > li:nth-child(even) { background-color: hsla(200, 10%, 80%, .7); }
-    .awesomplete.striped > ul > li:nth-child(even):hover { background-color: hsl(200, 40%, 80%); }
+    .striped >>> .awesomplete > ul > li:nth-child(even) { background-color: hsla(200, 10%, 80%, .7); }
+    .striped >>> .awesomplete > ul > li:nth-child(even):hover { background-color: hsl(200, 40%, 80%); }
 </style>
