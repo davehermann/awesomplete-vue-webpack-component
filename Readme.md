@@ -81,3 +81,8 @@ Vue.component("avwc", AVWC);
     + Awesomplete's *sort*
 + ```striped```
     + Add a "striped" CSS class to Awesomplete with a default color scheme
+
+## Supported Events
+
++ ```@selected```
+    + Fires on the ```awesomplete-select``` event, and provides the value of the selected element
