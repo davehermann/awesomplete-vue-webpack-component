@@ -14,7 +14,24 @@
 
     export default {
         // fillList MUST return a promise with an availableOptions array (see below)
-        props: ["autoFirst", "cssClass", "container", "fillList", "item", "maxItems", "minChars", "msThrottle", "sort", "striped"],
+        props: [
+            // AVWC options
+            "clearOnClose",     // Clear the input when the Awesomplete popup closes
+            "cssClass",         // String value with CSS class(es) to apply to component root
+            "fillList",         // Promise that returns data source for awesomplete
+            "msThrottle",       // Typing throttle in milliseconds before fillList is called
+            "striped",          // Applies a default striping class to every other item in the displayed list
+
+            // Awesomplete options
+            "autoFirst",
+            "maxItems",
+            "minChars",
+
+            // Awesomplete replaceable functions
+            "container",
+            "item",
+            "sort",
+        ],
 
         data: () => {
             return {
@@ -75,13 +92,16 @@
                     initializationOptions.item = this.item;
 
                 this.awesompleteObject = new awesomplete(codeInput, initializationOptions);
-                codeInput.addEventListener("awesomplete-select", (evt) => {
-                    evt.preventDefault();
 
-                    this.$emit("selected", evt.text.value);
+                codeInput.addEventListener("awesomplete-close", (evt) => { this.$emit("close", evt); });
+                codeInput.addEventListener("awesomplete-highlight", (evt) => { this.$emit("highlight", evt); });
+                codeInput.addEventListener("awesomplete-open", () => { this.$emit("open"); });
+                codeInput.addEventListener("awesomplete-select", (evt) => { this.$emit("select", evt); });
+                codeInput.addEventListener("awesomplete-selectcomplete", (evt) => {
+                    this.$emit("selectcomplete", evt);
 
-                    this.awesompleteObject.close();
-                    this.autocompleteText = null;
+                    if ((this.clearOnClose !== undefined) && (this.clearOnClose !== false))
+                        this.autocompleteText = null;
                 });
             },
 

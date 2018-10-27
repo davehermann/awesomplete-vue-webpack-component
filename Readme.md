@@ -61,6 +61,8 @@ Vue.component("avwc", AVWC);
 
 + ```v-bind:auto-first```
     + Awesomplete's *autoFirst* property
++ ```clear-on-close```
+    + Clear the search term automatically when the *selectcomplete* event fires
 + ```v-bind:container```
     + Override Awesomplete's *container* function
 + ```cssClass```
@@ -83,8 +85,12 @@ Vue.component("avwc", AVWC);
 
 ## Supported Events
 
-+ ```@selected```
-    + Fires on the ```awesomplete-select``` event, and provides the value of the selected element
+All five currently existing Awesomplete events are mapped to the VueJS event emitter <u>without</u> the **awesomplete-** prefix
++ ```awesomplete-close``` >>> ```@close```
++ ```awesomplete-highlight``` >>> ```@highlight```
++ ```awesomplete-open``` >>> ```@open```
++ ```awesomplete-select``` >>> ```@select```
++ ```awesomplete-selectcomplete``` >>> ```@selectcomplete```
 
 ## Styling
 + *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class
