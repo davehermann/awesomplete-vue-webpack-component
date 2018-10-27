@@ -19,9 +19,11 @@
         data: () => {
             return {
                 autocompleteFillWait: null,
-                autocompleteObject: null,
                 autocompleteRunning: false,
                 autocompleteText: null,
+
+                // The Awesomplete object needs to be a property in the Vue instance
+                awesompleteObject: null,
             };
         },
 
@@ -72,13 +74,13 @@
                 if (!!this.item)
                     initializationOptions.item = this.item;
 
-                this.autocompleteObject = new awesomplete(codeInput, initializationOptions);
+                this.awesompleteObject = new awesomplete(codeInput, initializationOptions);
                 codeInput.addEventListener("awesomplete-select", (evt) => {
                     evt.preventDefault();
 
                     this.$emit("selected", evt.text.value);
 
-                    this.autocompleteObject.close();
+                    this.awesompleteObject.close();
                     this.autocompleteText = null;
                 });
             },
@@ -93,9 +95,9 @@
                             //     1) an object array of { label, value }
                             //     2) an empty array
 
-                            this.autocompleteObject.list = availableOptions;
+                            this.awesompleteObject.list = availableOptions;
 
-                            this.autocompleteObject.evaluate();
+                            this.awesompleteObject.evaluate();
 
                             this.autocompleteRunning = false;
                         });
