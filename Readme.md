@@ -92,6 +92,11 @@ All five currently existing Awesomplete events are mapped to the VueJS event emi
 + ```awesomplete-select``` >>> ```@select```
 + ```awesomplete-selectcomplete``` >>> ```@selectcomplete```
 
+## Additional Events
+
++ ```@awesomplete-object```
+    + After Awesomplete is initialized, *AVWC* emits the Awesomplete object for direct usage
+
 ## Styling
 + *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class
 + The input element has an ```.avwc-entry``` class

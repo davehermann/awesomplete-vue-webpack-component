@@ -122,6 +122,9 @@
                     if ((this.clearOnClose !== undefined) && (this.clearOnClose !== false))
                         this.autocompleteText = null;
                 });
+
+                // Emit the initialized Awesomplete object for direct manipulation
+                this.$emit("awesomplete-object", this.awesompleteObject);
             },
 
             // Refresh source data
