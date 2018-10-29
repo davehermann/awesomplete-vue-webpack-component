@@ -1,13 +1,12 @@
 {
   "name": "awesomplete-vue-webpack-component",
-  "version": "0.1.0",
-  "description": "Awesomplete component for Vue with webpack",
+  "version": "0.2.0",
+  "description": "Awesomplete component for VueJS with webpack",
+  "keywords": ["awesomplete", "vue", "vuejs", "autocomplete"],
   "main": "component.vue",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Dave Hermann",
   "license": "MIT",
+  "repository": "github:davehermann/awesomplete-vue-webpack-component",
   "dependencies": {
     "awesomplete": "^1.1.3"
   }
