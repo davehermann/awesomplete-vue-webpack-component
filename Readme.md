@@ -120,6 +120,10 @@ All five currently existing Awesomplete events are mapped to the VueJS event emi
 
 + ```<avwc @awesomplete-object="awesompleteObjectHandler">```
     + After Awesomplete is initialized, *AVWC* emits the Awesomplete object for direct access
++ ```<avwc @ref-input="inputElementReference">```
+    + After Awesomplete is initialized, *AVWC* emits the reference to the input element
++ ```<avwc @ref-dropdown-button="dropDownButtonReference">```
+    + After Awesomplete is initialized, *AVWC* emits the reference to the drop-down button
 
 ## Styling
 + *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class

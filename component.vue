@@ -147,6 +147,10 @@
 
                 // Emit the initialized Awesomplete object for direct manipulation
                 this.$emit("awesomplete-object", this.awesompleteObject);
+
+                // Emit the reference to the input element and drop-down button
+                this.$emit("ref-input", this.$refs.searchTermEntry);
+                this.$emit("ref-dropdown-button", this.$refs.dropDownButton);
             },
 
             // Refresh source data
