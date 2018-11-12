@@ -1,6 +1,14 @@
 <template>
     <span :class="cssClasses" class="avwc-container">
         <input ref="searchTermEntry" v-model="autocompleteText" :placeholder="placeholder" class="avwc-entry" />
+        <button
+            v-if="dropdown"
+            ref="dropDownButton"
+            type="button"
+            class="avwc-dropdown"
+            >
+            <slot name="dropdown">&#x25BE;</slot>
+        </button>
     </span>
 </template>
 
@@ -18,12 +26,13 @@
     export default {
         props: {
             // AVWC options
-            clearOnClose: { type: Boolean, required: false, default: undefined },     // Clear the input when the Awesomplete popup closes
-            cssClass: { type: String, required: false, default: undefined },         // String value with CSS class(es) to apply to component root
+            clearOnClose: { type: Boolean, required: false, default: undefined },   // Clear the input when the Awesomplete popup closes
+            cssClass: { type: String, required: false, default: undefined },        // String value with CSS class(es) to apply to component root
+            dropdown: { type: Boolean, required: false, default: undefined },       // Style and react as a drop-down combo box
             // fillList MUST return a promise with an availableOptions array (see below)
-            fillList: { type: Function, required: true, default: undefined },         // Promise that returns data source for awesomplete
-            msThrottle: { type: Number, required: false, default: TYPING_DELAY },       // Typing throttle in milliseconds before fillList is called
-            striped: { type: Boolean, required: false, default: undefined },          // Applies a default striping class to every other item in the displayed list
+            fillList: { type: Function, required: true, default: undefined },       // Promise that returns data source for awesomplete
+            msThrottle: { type: Number, required: false, default: TYPING_DELAY },   // Typing throttle in milliseconds before fillList is called
+            striped: { type: Boolean, required: false, default: undefined },        // Applies a default striping class to every other item in the displayed list
 
             // Awesomplete options
             autoFirst: { type: Boolean, required: false, default: undefined },
@@ -77,7 +86,7 @@
 
             // Use either the default minimum search length or the passed in prop value
             minimumSearchLength () {
-                return this.minChars || MINIMUM_SEARCH_STRING_LENGTH;
+                return this.dropdown ? 0 : this.minChars || MINIMUM_SEARCH_STRING_LENGTH;
             },
 
             // Display a placeholder in the search term input based on the minimum search length
@@ -137,19 +146,23 @@
                         this.autocompleteText = null;
                 });
 
+                // Wire the drop-down behavior to the button
+                if (this.dropdown)
+                    this.WireDropDown();
+
                 // Emit the initialized Awesomplete object for direct manipulation
                 this.$emit("awesomplete-object", this.awesompleteObject);
             },
 
             // Refresh source data
-            RefreshAutocomplete () {
+            RefreshAutocomplete (viaDropdown) {
                 // Only refresh if the source data method is not already running and if the minimum search term length is met
-                if (!this.autocompleteRunning && !!this.autocompleteText && (this.autocompleteText.length >= this.minimumSearchLength)) {
+                if (!this.autocompleteRunning && viaDropdown || (!!this.autocompleteText && (this.autocompleteText.length >= this.minimumSearchLength))) {
                     // Flag that the source data method is being called
                     this.autocompleteRunning = true;
 
                     // Call the source data method (fillList Promise) passing in the search term
-                    this.fillList(this.autocompleteText)
+                    return this.fillList(this.autocompleteText)
                         .then(availableOptions => {
                             // availableOptions should be either
                             //     1) acceptable values for Awesomplete's .list property
@@ -175,6 +188,22 @@
 
                 // Call the source data method after a throttle delay, and track the timeout for clearing later
                 this.autocompleteFillWait = setTimeout(() => { this.RefreshAutocomplete(); }, this.completionThrottle);
+            },
+
+            WireDropDown () {
+                let buttonDropDown = this.$refs.dropDownButton;
+
+                buttonDropDown.addEventListener("click", (evt) => {
+                    if (this.awesompleteObject.ul.childNodes.length === 0) {
+                        this.awesompleteObject.minChars = 0;
+
+                        this.RefreshAutocomplete(true)
+                            .then(() => { this.awesompleteObject.minChars = this.minimumSearchLength; });
+                    } else if (this.awesompleteObject.ul.hasAttribute("hidden"))
+                        this.awesompleteObject.open();
+                    else
+                        this.awesompleteObject.close();
+                });
             },
         },
     };

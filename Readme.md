@@ -74,6 +74,12 @@ Vue.component("avwc", AVWC);
     + Override Awesomplete's *container* function
 + ```<avwc cssClass="class1 class2 class3" />```
     + Specify CSS classes (string value) to add to Awesomplete
++ ```<avwc dropdown />```
+    + Include a dropdown button to the right of the input box
+    + *AVWC* will wire the **fill-list** function to fire on an empty search term box (i.e. min-chars == 0)
+        + **An empty search case must be handled for a reasonable combobox UX**
+    + By default, the button content is a down arrow &#x25BE; (*&amp;#x25BE;*) character
+        + A [slot named "dropdown"](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) can be used to override the default down arrow
 + ```<avwc :item="OverrideItem" />```
     + Override Awesomplete's *item* function
 + ```<avwc :max-items="5" />```
