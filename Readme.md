@@ -74,7 +74,7 @@ Vue.component("avwc", AVWC);
     + Clear the search term automatically when the *selectcomplete* event fires
 + ```<avwc :container="OverrideContainer" />```
     + Override Awesomplete's *container* function
-+ ```<avwc cssClass="class1 class2 class3" />```
++ ```<avwc css-class="class1 class2 class3" />```
     + Specify CSS classes (string value) to add to Awesomplete
 + ```<avwc dropdown />```
     + Include a dropdown button to the right of the input box
@@ -82,6 +82,10 @@ Vue.component("avwc", AVWC);
         + **An empty search case must be handled for a reasonable combobox UX**
     + By default, the button content is a down arrow &#x25BE; (*&amp;#x25BE;*) character
         + A [slot named "dropdown"](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) can be used to override the default down arrow
++ ```<avwc drop-down-css-class="class1 class2 class3" />```
+    + Specify CSS classes (string value) to add to the drop-down button
++ ```<avwc input-css-class="class1 class2 class3" />```
+    + Specify CSS classes (string value) to add to the input element
 + ```<avwc :item="OverrideItem" />```
     + Override Awesomplete's *item* function
 + ```<avwc :max-items="5" />```

@@ -1,9 +1,16 @@
 <template>
     <span :class="cssClasses" class="avwc-container">
-        <input ref="searchTermEntry" v-model="autocompleteText" :placeholder="placeholder" class="avwc-entry" />
+        <input
+            ref="searchTermEntry"
+            v-model="autocompleteText"
+            :placeholder="placeholder"
+            :class="inputCssClass"
+            class="avwc-entry"
+            />
         <button
             v-if="dropdown"
             ref="dropDownButton"
+            :class="dropDownCssClass"
             type="button"
             class="avwc-dropdown"
             >
@@ -22,8 +29,10 @@
             clearOnClose: { type: Boolean, required: false, default: undefined },   // Clear the input when the Awesomplete popup closes
             cssClass: { type: String, required: false, default: undefined },        // String value with CSS class(es) to apply to component root
             dropdown: { type: Boolean, required: false, default: undefined },       // Style and react as a drop-down combo box
+            dropDownCssClass: { type: String, required: false, default: undefined },     // String value with CSS class(es) to apply to drop-down button
             // fillList MUST return a promise with an availableOptions array (see below)
             fillList: { type: [Function, Array, String], required: true, default: undefined },       // Promise that returns data source for awesomplete
+            inputCssClass: { type: String, required: false, default: undefined },   // String value with CSS class(es) to apply to input element
             // Default typing throttle before calling fillList
             msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
             striped: { type: Boolean, required: false, default: undefined },        // Applies a default striping class to every other item in the displayed list
