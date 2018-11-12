@@ -12,7 +12,7 @@ Awesomplete wrapper for Vue and webpack
 ```npm install awesomplete-vue-webpack-component```
 
 ### Configure usage of the component with VueJS
-```
+```javascript
 import AVWC from "awesomplete-vue-webpack-component";
 
 Vue.component("avwc", AVWC);
@@ -20,7 +20,7 @@ Vue.component("avwc", AVWC);
 
 ### Use in VueJS .vue SFC file
 
-```
+```html
 <template>
     <avwc :fill-list="DataSourcePromise" @selectcomplete="ItemSelected"></avwc>
 </template>
@@ -45,7 +45,7 @@ Vue.component("avwc", AVWC);
 *AVWC* uses single-file component (.vue) design, and automatically imports the Awesomplete CSS.
 
 
-```
+```javascript
 {
     module: {
         rules: [
@@ -118,6 +118,7 @@ All five currently existing Awesomplete events are mapped to the VueJS event emi
 ## Styling
 + *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class
 + The input element has an ```.avwc-entry``` class
++ The drop-down button has an ```.avwc-dropdown``` class
 
 # License
 
