@@ -13,7 +13,8 @@
   "license": "MIT",
   "repository": "github:davehermann/awesomplete-vue-webpack-component",
   "dependencies": {
-    "awesomplete": "^1.1.3"
+    "awesomplete": "^1.1.3",
+    "vue": "^2.5.17"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
