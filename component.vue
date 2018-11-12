@@ -1,6 +1,6 @@
 <template>
-    <span class="avwc-container" :class="cssClasses">
-        <input class="avwc-entry" ref="searchTermEntry" v-model="autocompleteText" :placeholder="placeholder" />
+    <span :class="cssClasses" class="avwc-container">
+        <input ref="searchTermEntry" v-model="autocompleteText" :placeholder="placeholder" class="avwc-entry" />
     </span>
 </template>
 
@@ -16,25 +16,25 @@
         MINIMUM_SEARCH_STRING_LENGTH = 2;
 
     export default {
-        props: [
+        props: {
             // AVWC options
-            "clearOnClose",     // Clear the input when the Awesomplete popup closes
-            "cssClass",         // String value with CSS class(es) to apply to component root
+            clearOnClose: { type: Boolean, required: false, default: undefined },     // Clear the input when the Awesomplete popup closes
+            cssClass: { type: String, required: false, default: undefined },         // String value with CSS class(es) to apply to component root
             // fillList MUST return a promise with an availableOptions array (see below)
-            "fillList",         // Promise that returns data source for awesomplete
-            "msThrottle",       // Typing throttle in milliseconds before fillList is called
-            "striped",          // Applies a default striping class to every other item in the displayed list
+            fillList: { type: Function, required: true, default: undefined },         // Promise that returns data source for awesomplete
+            msThrottle: { type: Number, required: false, default: TYPING_DELAY },       // Typing throttle in milliseconds before fillList is called
+            striped: { type: Boolean, required: false, default: undefined },          // Applies a default striping class to every other item in the displayed list
 
             // Awesomplete options
-            "autoFirst",
-            "maxItems",
-            "minChars",
+            autoFirst: { type: Boolean, required: false, default: undefined },
+            maxItems: { type: Number, required: false, default: MAXIMUM_ITEMS_TO_DISPLAY },
+            minChars: { type: Number, required: false, default: MINIMUM_SEARCH_STRING_LENGTH },
 
             // Awesomplete replaceable functions
-            "container",
-            "item",
-            "sort",
-        ],
+            container: { type: Function, required: false, default: undefined },
+            item: { type: Function, required: false, default: undefined },
+            sort: { type: Function, required: false, default: undefined },
+        },
 
         data: () => {
             return {
@@ -87,6 +87,20 @@
 
                 return null;
             },
+        },
+
+        watch: {
+            // Watch for any changes to the search term input
+            autocompleteText (val) {
+                // Call the throttle trigger if the minimum search term length is met
+                if (!!val && (val.length >= this.minimumSearchLength))
+                    this.TriggerAutocomplete();
+            },
+        },
+
+        mounted: function() {
+            // Activate Awesomplete at mout
+            this.ActivateAutocomplete();
         },
 
         methods: {
@@ -163,21 +177,7 @@
                 this.autocompleteFillWait = setTimeout(() => { this.RefreshAutocomplete(); }, this.completionThrottle);
             },
         },
-
-        watch: {
-            // Watch for any changes to the search term input
-            autocompleteText (val) {
-                // Call the throttle trigger if the minimum search term length is met
-                if (!!val && (val.length >= this.minimumSearchLength))
-                    this.TriggerAutocomplete();
-            },
-        },
-
-        mounted: function() {
-            // Activate Awesomplete at mout
-            this.ActivateAutocomplete();
-        },
-    }
+    };
 </script>
 
 <style scoped>
