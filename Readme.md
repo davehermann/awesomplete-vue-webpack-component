@@ -2,7 +2,7 @@
 Awesomplete wrapper for Vue and webpack
 
 *Awesomplete Vue webpack Component (AVWC)* is an Awesomplete VueJS wrapper component that assumes webpack bundling.
-*AVWC* uses a Promise-based data source allowing developer flexibility for source implementation, and supports setting/overriding Awesomplete properties via VueJS component structure.
+*AVWC* accepts comma-separated strings, arrays, or Promise-returning functions as its data source allowing developer flexibility for source implementation, and supports setting/overriding Awesomplete properties via VueJS component structure.
 *AVWC* also has a few additional features over core Awesomplete.
 
 ## Getting Started
@@ -61,8 +61,10 @@ Vue.component("avwc", AVWC);
 
 ### Required
 
-+ ```<avwc :fill-list="PromiseMethod" />```
-    + **Must** return a Promise that resolves with an Awesomplete-compatible set of options
++ ```<avwc fill-list="CommaSeparatedStringList" />```  
+```<avwc :fill-list="Array" />```  
+```<avwc :fill-list="PromiseMethod" />```
+    + Array and Promise return value **must** be an Awesomplete-compatible set of options
 
 ### Optional
 

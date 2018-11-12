@@ -23,9 +23,9 @@
             cssClass: { type: String, required: false, default: undefined },        // String value with CSS class(es) to apply to component root
             dropdown: { type: Boolean, required: false, default: undefined },       // Style and react as a drop-down combo box
             // fillList MUST return a promise with an availableOptions array (see below)
-            fillList: { type: Function, required: true, default: undefined },       // Promise that returns data source for awesomplete
+            fillList: { type: [Function, Array, String], required: true, default: undefined },       // Promise that returns data source for awesomplete
             // Default typing throttle before calling fillList
-            msThrottle: { type: Number, required: false, default: 200 },   // Typing throttle in milliseconds before fillList is called
+            msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
             striped: { type: Boolean, required: false, default: undefined },        // Applies a default striping class to every other item in the displayed list
 
             // Awesomplete options
@@ -148,7 +148,19 @@
                     this.autocompleteRunning = true;
 
                     // Call the source data method (fillList Promise) passing in the search term
-                    return this.fillList(this.autocompleteText)
+                    let dataFill = Promise.resolve();
+
+                    if (this.fillList instanceof Function)
+                        dataFill = this.fillList(this.autocompleteText);
+                    else if (this.fillList instanceof Array)
+                        dataFill = Promise.resolve(this.fillList);
+                    else if (typeof this.fillList === "string")
+                        dataFill = Promise.resolve(this.fillList.split(","));
+                    else
+                        dataFill = dataFill.then(() => Promise.reject("awesomplete-vue-webpack-component: No list-filling function defined"));
+
+                    // return this.fillList(this.autocompleteText)
+                    return dataFill
                         .then(availableOptions => {
                             // availableOptions should be either
                             //     1) acceptable values for Awesomplete's .list property
