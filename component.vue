@@ -16,13 +16,6 @@
     import awesomplete from "awesomplete";
     import "awesomplete/awesomplete.css";
 
-    // Default typing throttle before calling fillList
-    const TYPING_DELAY = 200,
-        // Default maximum items to show in Awesomplete list (matches Awesomplete default)
-        MAXIMUM_ITEMS_TO_DISPLAY = 10,
-        // Default minimum length of search term (matches Awesomplete default)
-        MINIMUM_SEARCH_STRING_LENGTH = 2;
-
     export default {
         props: {
             // AVWC options
@@ -31,13 +24,16 @@
             dropdown: { type: Boolean, required: false, default: undefined },       // Style and react as a drop-down combo box
             // fillList MUST return a promise with an availableOptions array (see below)
             fillList: { type: Function, required: true, default: undefined },       // Promise that returns data source for awesomplete
-            msThrottle: { type: Number, required: false, default: TYPING_DELAY },   // Typing throttle in milliseconds before fillList is called
+            // Default typing throttle before calling fillList
+            msThrottle: { type: Number, required: false, default: 200 },   // Typing throttle in milliseconds before fillList is called
             striped: { type: Boolean, required: false, default: undefined },        // Applies a default striping class to every other item in the displayed list
 
             // Awesomplete options
             autoFirst: { type: Boolean, required: false, default: undefined },
-            maxItems: { type: Number, required: false, default: MAXIMUM_ITEMS_TO_DISPLAY },
-            minChars: { type: Number, required: false, default: MINIMUM_SEARCH_STRING_LENGTH },
+            // Default maximum items to show in Awesomplete list (matches Awesomplete default)
+            maxItems: { type: Number, required: false, default: 10 },
+            // Default minimum length of search term (matches Awesomplete default)
+            minChars: { type: Number, required: false, default: 2 },
 
             // Awesomplete replaceable functions
             container: { type: Function, required: false, default: undefined },
@@ -60,11 +56,6 @@
         },
 
         computed: {
-            // Use either the default throttle or the passed in prop value
-            completionThrottle () {
-                return this.msThrottle || TYPING_DELAY;
-            },
-
             // Complete list of CSS classes to include on the root
             cssClasses () {
                 let css = {
@@ -79,14 +70,9 @@
                 return css;
             },
 
-            // Use either the default maximum items or the passed in prop value
-            maximumDisplayItems () {
-                return this.maxItems || MAXIMUM_ITEMS_TO_DISPLAY;
-            },
-
             // Use either the default minimum search length or the passed in prop value
             minimumSearchLength () {
-                return this.dropdown ? 0 : this.minChars || MINIMUM_SEARCH_STRING_LENGTH;
+                return this.dropdown ? 0 : this.minChars;
             },
 
             // Display a placeholder in the search term input based on the minimum search length
@@ -122,7 +108,7 @@
                 let initializationOptions = {
                     autoFirst: this.autoFirst,
                     minChars: this.minimumSearchLength,
-                    maxItems: this.maximumDisplayItems,
+                    maxItems: this.maxItems,
                     sort: this.sort,
                 };
                 if (!!this.container)
@@ -187,7 +173,7 @@
                     clearTimeout(this.autocompleteFillWait);
 
                 // Call the source data method after a throttle delay, and track the timeout for clearing later
-                this.autocompleteFillWait = setTimeout(() => { this.RefreshAutocomplete(); }, this.completionThrottle);
+                this.autocompleteFillWait = setTimeout(() => { this.RefreshAutocomplete(); }, this.msThrottle);
             },
 
             WireDropDown () {
