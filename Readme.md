@@ -61,69 +61,52 @@ Vue.component("avwc", AVWC);
 
 ### Required
 
-+ ```<avwc fill-list="CommaSeparatedStringList" />```  
-```<avwc :fill-list="Array" />```  
-```<avwc :fill-list="PromiseMethod" />```
-    + Array and Promise return value **must** be an Awesomplete-compatible set of options
+| Prop | Type | Notes |
+| ---- | ---- | ----- |
+| `fill-list` | <ul><li>Comma-separated **String** list</li><li>**Array**</li><li>**Function** that returns a Promise</li></ul> | Awesomplete-compatible set of options |
 
 ### Optional
 
-+ ```<avwc :auto-first="true" />```
-    + Awesomplete's *autoFirst* property
-+ ```<avwc clear-on-close />```
-    + Clear the search term automatically when the *selectcomplete* event fires
-+ ```<avwc :container="OverrideContainer" />```
-    + Override Awesomplete's *container* function
-+ ```<avwc css-class="class1 class2 class3" />```
-    + Specify CSS classes (string value) to add to Awesomplete
-+ ```<avwc dropdown />```
-    + Include a dropdown button to the right of the input box
-    + *AVWC* will wire the **fill-list** function to fire on an empty search term box (i.e. min-chars == 0)
-        + **An empty search case must be handled for a reasonable combobox UX**
-    + By default, the button content is a down arrow &#x25BE; (*&amp;#x25BE;*) character
-        + A [slot named "dropdown"](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) can be used to override the default down arrow
-+ ```<avwc drop-down-css-class="class1 class2 class3" />```
-    + Specify CSS classes (string value) to add to the drop-down button
-+ ```<avwc input-css-class="class1 class2 class3" />```
-    + Specify CSS classes (string value) to add to the input element
-+ ```<avwc :item="OverrideItem" />```
-    + Override Awesomplete's *item* function
-+ ```<avwc :max-items="5" />```
-    + Awesomplete's *maxItems* property
-        + With the above setting it to "5"
-    + **Default: 10**
-+ ```<avwc :min-chars="3" />```
-    + A re-implementation of Awesomplete's *minChars* property
-        + With the above setting it to "3"
-    + The implementation ensures that the call to the data source Promise will not fire unless the minimum character length has been met
-    + **Default: 2**
-+ ```<avwc :ms-throttle="1000" />```
-    + Implements a delay for the call to the data source Promise to ensure that it doesn't fire too frequently while a user is still entering the search term
-        + With the above setting it to "1000" ms (1 second)
-    + **Default: 200ms**
-+ ```<avwc :sort="false" />```
-    + Awesomplete's *sort* option
-        + With the above turning off automatic Awesomplete sorting
-+ ```<avwc striped />```
-    + Add a "striped" CSS class to Awesomplete with a default striping color scheme applied
+| Prop | Type | Notes |
+| ---- | ---- | ----- |
+| `auto-first` | Boolean | Awesomplete's *autoFirst* property |
+| `clear-on-close` | Boolean | Clear the search term automatically when the *selectcomplete* event fires |
+| `container` | Function | Override Awesomplete's *container* function |
+| `css-class` | String | One or more CSS classes to add to the Awesomplete block |
+| `dropdown` | Boolean | <ul><li>Include a dropdown button to the right of the input box</li><li>*AVWC* will wire the **fill-list** function to fire on an empty search term box (i.e. min-chars == 0)<ul><li>**An empty search case must be handled for a reasonable combobox UX**</li></ul></li><li>By default, the button content is a down arrow &#x25BE; (*&amp;#x25BE;*) character<ul><li>A [slot named "dropdown"](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) can be used to override the default down arrow</li></ul></li></ul> |
+| `drop-down-css-class` | String | One or more CSS classes to add to the drop-down button |
+| `input-css-class` | String | One or more CSS classes to add to the text input element |
+| `item` | Function | Override Awesomplete's *item* function |
+| `max-items` | Number | <ul><li>Awesomplete's *maxItems* property</li><li>default: **10**</li></ul> |
+| `min-chars` | Number | <ul><li>A re-implementation of Awesomplete's *minChars* property</li><li>The implementation ensures that a function passed to **fill-list** will not be called unless the minimum character length has been met</li><li>default: **2**</li></ul> |
+| `ms-throttle` | Number | <ul><li>Adds an active-typing delay - in milliseconds - to the data source evaluation</li><li>default: **200** milliseconds</li></ul> |
+| `sort` | <ul><li>Function</li><li>*false*</li></ul> | Awesomplete's *sort* function |
+| `striped` | Boolean | Add a *.striped* CSS class to Awesomplete with a default striping color scheme applied |
 
-## Supported Events
+
+## Emitted events
+
+### Awesomplete events
 
 All five currently existing Awesomplete events are mapped to the VueJS event emitter <u>without</u> the **awesomplete-** prefix
-+ ```awesomplete-close``` >>> ```<avwc @close="closeHandler" />```
-+ ```awesomplete-highlight``` >>> ```<avwc @highlight="highlightHandler" />```
-+ ```awesomplete-open``` >>> ```<avwc @open="openHandler" />```
-+ ```awesomplete-select``` >>> ```<avwc @select="selectHandler" />```
-+ ```awesomplete-selectcomplete``` >>> ```<avwc @selectcomplete="selectcompleteHandler" />```
 
-## Additional Events
+| Awesomplete Event | *AVWC* Emitted Event |
+| ----------------- | -------------------- |
+| ```awesomplete-close``` | ```close``` |
+| ```awesomplete-highlight``` | ```highlight``` |
+| ```awesomplete-open``` | ```open``` |
+| ```awesomplete-select``` | ```select``` |
+| ```awesomplete-selectcomplete``` | ```selectcomplete``` |
 
-+ ```<avwc @awesomplete-object="awesompleteObjectHandler">```
-    + After Awesomplete is initialized, *AVWC* emits the Awesomplete object for direct access
-+ ```<avwc @ref-input="inputElementReference">```
-    + After Awesomplete is initialized, *AVWC* emits the reference to the input element
-+ ```<avwc @ref-dropdown-button="dropDownButtonReference">```
-    + After Awesomplete is initialized, *AVWC* emits the reference to the drop-down button
+## Object references
+
+*AVWC* emits objects as events after initialization
+
+| Emitted Event | Description |
+| ------------- | ----------- |
+| awesomplete-object | The Awesomplete object |
+| ref-input | The text input element |
+| ref-dropdown-button | The dropdown button (only when `dropdown` is enabled) |
 
 ## Styling
 + *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class
