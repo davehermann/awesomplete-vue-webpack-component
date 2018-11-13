@@ -233,7 +233,6 @@
 </script>
 
 <style scoped>
-    .avwc-container >>> input { min-width: 20em; }
     .striped >>> .awesomplete > ul > li:nth-child(even) { background-color: hsla(200, 10%, 80%, .7); }
     .striped >>> .awesomplete > ul > li:nth-child(even):hover { background-color: hsl(200, 40%, 80%); }
 </style>
