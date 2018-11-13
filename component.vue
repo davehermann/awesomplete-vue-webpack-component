@@ -3,7 +3,7 @@
         <input
             ref="searchTermEntry"
             v-model="autocompleteText"
-            :placeholder="placeholder"
+            :placeholder="placeholderDisplayed"
             :class="inputCssClass"
             class="avwc-entry"
             />
@@ -35,6 +35,7 @@
             inputCssClass: { type: String, required: false, default: undefined },   // String value with CSS class(es) to apply to input element
             // Default typing throttle before calling fillList
             msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
+            placeholder: { type: [Boolean, String], required: false, default: undefined },          // Placeholder to show in the input field
             striped: { type: Boolean, required: false, default: undefined },        // Applies a default striping class to every other item in the displayed list
 
             // Awesomplete options
@@ -84,10 +85,21 @@
                 return this.dropdown ? 0 : this.minChars;
             },
 
-            // Display a placeholder in the search term input based on the minimum search length
-            placeholder () {
-                if (this.minimumSearchLength > 0)
-                    return "Enter at least " + this.minimumSearchLength + " character" + (this.minimumSearchLength == 1 ? "" : "s") + " to search";
+            // Display a placeholder in the search term input, with replaceable tokens for minimumSearchLength
+            placeholderDisplayed () {
+                // Never display if placeholder is false
+                if (this.placeholder !== false) {
+                    // Set the default
+                    let placeholderText = "Enter at least {minChars} to search";
+
+                    // Use a string placeholder instead of the default
+                    if ((this.placeholder !== undefined) && (typeof this.placeholder == "string"))
+                        placeholderText = this.placeholder;
+
+                    // if the passed-in placeholder is true or a string, display placeholder text
+                    if ((this.placeholder !== undefined) || (this.minimumSearchLength > 0))
+                        return placeholderText.replace(/{minChars}/i, this.minimumSearchLength + " character" + (this.minimumSearchLength == 1 ? "" : "s"));
+                }
 
                 return null;
             },

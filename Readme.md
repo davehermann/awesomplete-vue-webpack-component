@@ -80,6 +80,7 @@ Vue.component("avwc", AVWC);
 | `max-items` | Number | <ul><li>Awesomplete's *maxItems* property</li><li>default: **10**</li></ul> |
 | `min-chars` | Number | <ul><li>A re-implementation of Awesomplete's *minChars* property</li><li>The implementation ensures that a function passed to **fill-list** will not be called unless the minimum character length has been met</li><li>default: **2**</li></ul> |
 | `ms-throttle` | Number | <ul><li>Adds an active-typing delay - in milliseconds - to the data source evaluation</li><li>default: **200** milliseconds</li></ul> |
+| `placeholder` | <ul><li>String</li><li>Boolean</li></ul> | <ul><li>Set placeholder text for the text input element</li><li>Using the token **{minChars}** in the string will replace it with `min-chars` value + "characters"</li><li>*false*, an empty string, or leaving this unset with `min-chars` == **0** will hide the placeholder</li><li>*true* will show the default placeholder even if `min-chars` == **0**</li><li>default: **Enter at least {minChars} to search**</li></ul> |
 | `sort` | <ul><li>Function</li><li>*false*</li></ul> | Awesomplete's *sort* function |
 | `striped` | Boolean | Add a *.striped* CSS class to Awesomplete with a default striping color scheme applied |
 
