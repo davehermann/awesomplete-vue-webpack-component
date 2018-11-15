@@ -75,6 +75,7 @@ Vue.component("avwc", AVWC);
 | `css-class` | String | One or more CSS classes to add to the Awesomplete block |
 | `dropdown` | Boolean | <ul><li>Include a dropdown button to the right of the input box</li><li>*AVWC* will wire the **fill-list** function to fire on an empty search term box (i.e. min-chars == 0)<ul><li>**An empty search case must be handled for a reasonable combobox UX**</li></ul></li><li>By default, the button content is a down arrow &#x25BE; (*&amp;#x25BE;*) character<ul><li>A [slot named "dropdown"](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) can be used to override the default down arrow</li></ul></li></ul> |
 | `drop-down-css-class` | String | One or more CSS classes to add to the drop-down button |
+| `initial-text` | String | <ul><li>Set the initial text to display in the text input box</li><li>If the value isn't available at mount, but is set before the user enters text in the field, the value will still be displayed</li></ul> |
 | `input-css-class` | String | One or more CSS classes to add to the text input element |
 | `item` | Function | Override Awesomplete's *item* function |
 | `max-items` | Number | <ul><li>Awesomplete's *maxItems* property</li><li>default: **10**</li></ul> |

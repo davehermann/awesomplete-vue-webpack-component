@@ -32,6 +32,7 @@
             dropDownCssClass: { type: String, required: false, default: undefined },     // String value with CSS class(es) to apply to drop-down button
             // fillList MUST return a promise with an availableOptions array (see below)
             fillList: { type: [Function, Array, String], required: true, default: undefined },       // Promise that returns data source for awesomplete
+            initialText: { type: String, required: false, default: undefined },     // Text to initially fill the text input box with
             inputCssClass: { type: String, required: false, default: undefined },   // String value with CSS class(es) to apply to input element
             // Default typing throttle before calling fillList
             msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
@@ -112,6 +113,13 @@
                 if (!!val && (val.length >= this.minimumSearchLength))
                     this.TriggerAutocomplete();
             },
+
+            // Initialization text available after mount
+            initialText (val) {
+                // Ignore if any value has been entered into the text input
+                if (!!val && !this.autocompleteText)
+                    this.autocompleteText = val;
+            },
         },
 
         mounted: function() {
@@ -122,6 +130,10 @@
         methods: {
             // Autocomplete initialization
             ActivateAutocomplete () {
+                // Initialization text available at mount
+                if (!!this.initialText)
+                    this.autocompleteText = this.initialText;
+
                 // Get the input object
                 let inputSearchTerm = this.$refs.searchTermEntry;
 
