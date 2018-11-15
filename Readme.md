@@ -100,7 +100,7 @@ All five currently existing Awesomplete events are mapped to the VueJS event emi
 | ```awesomplete-select``` | ```select``` |
 | ```awesomplete-selectcomplete``` | ```selectcomplete``` |
 
-## Object references
+### Object references
 
 *AVWC* emits objects as events after initialization
 
