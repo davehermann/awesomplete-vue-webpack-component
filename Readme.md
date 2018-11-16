@@ -82,8 +82,10 @@ The following props are recognized by *AVWC*.
 | Prop | Type | Notes |
 | ---- | ---- | ----- |
 | `container` | Function | Override Awesomplete's *container* function |
+| `filter` | Function | Override Awesomplete's *filter* function |
 | `item` | Function | Override Awesomplete's *item* function |
-| `sort` | <ul><li>Function</li><li>*false*</li></ul> | Awesomplete's *sort* function |
+| `replace` | Function | <ul><li>Override Awesomplete's *replace* function</li><li>The *AVWC* `clear-on-close` option will override `replace` behavior</ul> |
+| `sort` | <ul><li>Function</li><li>*false*</li></ul> | Override Awesomplete's *sort* function |
 
 #### *AVWC*  properties
 

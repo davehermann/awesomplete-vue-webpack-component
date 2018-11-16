@@ -48,7 +48,9 @@
 
             // Awesomplete replaceable functions
             container: { type: Function, required: false, default: undefined },
+            filter: { type: Function, required: false, default: undefined },
             item: { type: Function, required: false, default: undefined },
+            replace: { type: Function, required: false, default: undefined },
             sort: { type: Function, required: false, default: undefined },
         },
 
@@ -154,8 +156,12 @@
                 };
                 if (!!this.container)
                     initializationOptions.container = this.container;
+                if (!!this.filter)
+                    initializationOptions.filter = this.filter;
                 if (!!this.item)
                     initializationOptions.item = this.item;
+                if (!!this.replace)
+                    initializationOptions.replace = this.replace;
 
                 // Initialize Awesomplete object
                 this.awesompleteObject = new awesomplete(inputSearchTerm, initializationOptions);
