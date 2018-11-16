@@ -37,6 +37,7 @@
             // Default typing throttle before calling fillList
             msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
             placeholder: { type: [Boolean, String], required: false, default: undefined },          // Placeholder to show in the input field
+            replaceSelectionWithLabel: { type: Boolean, required: false, default: false },          // Built-in function for replacing a selection with the text of an option instead of value
             striped: { type: Boolean, required: false, default: undefined },        // Applies a default striping class to every other item in the displayed list
 
             // Awesomplete options
@@ -66,8 +67,8 @@
                 // The Awesomplete object needs to be a property in the Vue instance
                 awesompleteObject: null,
 
-                // Flag to track whether initialText has been set
-                initialTextEntered: false,
+                // Flag to track whether we're setting the text in the component, and not to evaluate through Awesomplete
+                textSetInternally: false,
             };
         },
 
@@ -114,9 +115,9 @@
         watch: {
             // Watch for any changes to the search term input
             autocompleteText (val) {
-                // Do not trigger if the initialText is what's displayed
-                if (this.initialTextEntered)
-                    this.initialTextEntered = false;
+                // Do not trigger if the text was set via internal code
+                if (this.textSetInternally)
+                    this.textSetInternally = false;
                 // Call the throttle trigger if the minimum search term length is met
                 else if (!!val && (val.length >= this.minimumSearchLength))
                     this.TriggerAutocomplete();
@@ -126,7 +127,7 @@
             initialText (val) {
                 // Ignore if any value has been entered into the text input
                 if (!!val && (this.autocompleteText === null)) {
-                    this.initialTextEntered = true;
+                    this.textSetInternally = true;
                     this.autocompleteText = val;
                 }
             },
@@ -174,9 +175,17 @@
                 inputSearchTerm.addEventListener("awesomplete-selectcomplete", (evt) => {
                     this.$emit("selectcomplete", evt);
 
+                    // Optionally set the input search term to the label instead of the value after selection
+                    if (!this.replace && (this.replaceSelectionWithLabel !== undefined) && (this.replaceSelectionWithLabel !== false) && !!evt.text && !!evt.text.label) {
+                        this.textSetInternally = true;
+                        this.autocompleteText = evt.text.label;
+                    }
+
                     // Optionally clear the input search term after selection
-                    if ((this.clearOnClose !== undefined) && (this.clearOnClose !== false))
+                    if (!this.replace && (this.clearOnClose !== undefined) && (this.clearOnClose !== false)) {
+                        this.textSetInternally = true;
                         this.autocompleteText = null;
+                    }
                 });
 
                 // Wire the drop-down behavior to the button
