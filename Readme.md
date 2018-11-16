@@ -59,6 +59,8 @@ Vue.component("avwc", AVWC);
 
 ## Supported Props
 
+The following props are recognized by *AVWC*.
+
 ### Required
 
 | Prop | Type | Notes |
@@ -67,22 +69,34 @@ Vue.component("avwc", AVWC);
 
 ### Optional
 
+#### Awesomplete properties
+
 | Prop | Type | Notes |
 | ---- | ---- | ----- |
 | `auto-first` | Boolean | Awesomplete's *autoFirst* property |
-| `clear-on-close` | Boolean | Clear the search term automatically when the *selectcomplete* event fires |
+| `max-items` | Number | <ul><li>Awesomplete's *maxItems* property</li><li>default: **10**</li></ul> |
+| `min-chars` | Number | <ul><li>A re-implementation of Awesomplete's *minChars* property</li><li>The implementation ensures that a function passed to **fill-list** will not be called unless the minimum character length has been met</li><li>default: **2**</li></ul> |
+
+#### Awesomplete functions
+
+| Prop | Type | Notes |
+| ---- | ---- | ----- |
 | `container` | Function | Override Awesomplete's *container* function |
+| `item` | Function | Override Awesomplete's *item* function |
+| `sort` | <ul><li>Function</li><li>*false*</li></ul> | Awesomplete's *sort* function |
+
+#### *AVWC*  properties
+
+| Prop | Type | Notes |
+| ---- | ---- | ----- |
+| `clear-on-close` | Boolean | Clear the search term automatically when the *selectcomplete* event fires |
 | `css-class` | String | One or more CSS classes to add to the Awesomplete block |
 | `dropdown` | Boolean | <ul><li>Include a dropdown button to the right of the input box</li><li>*AVWC* will wire the **fill-list** function to fire on an empty search term box (i.e. min-chars == 0)<ul><li>**An empty search case must be handled for a reasonable combobox UX**</li></ul></li><li>By default, the button content is a down arrow &#x25BE; (*&amp;#x25BE;*) character<ul><li>A [slot named "dropdown"](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) can be used to override the default down arrow</li></ul></li></ul> |
 | `drop-down-css-class` | String | One or more CSS classes to add to the drop-down button |
 | `initial-text` | String | <ul><li>Set the initial text to display in the text input box</li><li>If the value isn't available at mount, but is set before the user enters text in the field, the value will still be displayed</li></ul> |
 | `input-css-class` | String | One or more CSS classes to add to the text input element |
-| `item` | Function | Override Awesomplete's *item* function |
-| `max-items` | Number | <ul><li>Awesomplete's *maxItems* property</li><li>default: **10**</li></ul> |
-| `min-chars` | Number | <ul><li>A re-implementation of Awesomplete's *minChars* property</li><li>The implementation ensures that a function passed to **fill-list** will not be called unless the minimum character length has been met</li><li>default: **2**</li></ul> |
 | `ms-throttle` | Number | <ul><li>Adds an active-typing delay - in milliseconds - to the data source evaluation</li><li>default: **200** milliseconds</li></ul> |
 | `placeholder` | <ul><li>String</li><li>Boolean</li></ul> | <ul><li>Set placeholder text for the text input element</li><li>Using the token **{minChars}** in the string will replace it with `min-chars` value + "characters"</li><li>*false*, an empty string, or leaving this unset with `min-chars` == **0** will hide the placeholder</li><li>*true* will show the default placeholder even if `min-chars` == **0**</li><li>default: **Enter at least {minChars} to search**</li></ul> |
-| `sort` | <ul><li>Function</li><li>*false*</li></ul> | Awesomplete's *sort* function |
 | `striped` | Boolean | Add a *.striped* CSS class to Awesomplete with a default striping color scheme applied |
 
 
@@ -111,9 +125,16 @@ All five currently existing Awesomplete events are mapped to the VueJS event emi
 | ref-dropdown-button | The dropdown button (only when `dropdown` is enabled) |
 
 ## Styling
+
+*AVWC* provides CSS classes on its UI elements
 + *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class
 + The input element has an ```.avwc-entry``` class
 + The drop-down button has an ```.avwc-dropdown``` class
+
+Additionally, as noted above, the following props can be used to set additional CSS classes on each UI element
++ `css-class`
++ `drop-down-css-class`
++ `input-css-class`
 
 # License
 
