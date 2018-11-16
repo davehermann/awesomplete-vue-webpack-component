@@ -63,6 +63,9 @@
 
                 // The Awesomplete object needs to be a property in the Vue instance
                 awesompleteObject: null,
+
+                // Flag to track whether initialText has been set
+                initialTextEntered: false,
             };
         },
 
@@ -109,16 +112,21 @@
         watch: {
             // Watch for any changes to the search term input
             autocompleteText (val) {
+                // Do not trigger if the initialText is what's displayed
+                if (this.initialTextEntered)
+                    this.initialTextEntered = false;
                 // Call the throttle trigger if the minimum search term length is met
-                if (!!val && (val.length >= this.minimumSearchLength))
+                else if (!!val && (val.length >= this.minimumSearchLength))
                     this.TriggerAutocomplete();
             },
 
             // Initialization text available after mount
             initialText (val) {
                 // Ignore if any value has been entered into the text input
-                if (!!val && !this.autocompleteText)
+                if (!!val && (this.autocompleteText === null)) {
+                    this.initialTextEntered = true;
                     this.autocompleteText = val;
+                }
             },
         },
 
