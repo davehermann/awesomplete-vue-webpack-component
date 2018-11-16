@@ -91,7 +91,7 @@ The following props are recognized by *AVWC*.
 
 | Prop | Type | Notes |
 | ---- | ---- | ----- |
-| `clear-on-close` | Boolean | <ul><li>Clear the search term automatically when the *selectcomplete* event fires</li><li>Ignored if a `replace` function is defined</li></ul> |
+| `clear-on-close` | Boolean | <ul><li>Clear the search term automatically when the *selectcomplete* event fires</li><li>This flag is the equivalent of setting `:replace-selection-with="null"`</li><li>Ignored if a `replace` function is defined</li></ul> |
 | `css-class` | String | One or more CSS classes to add to the Awesomplete block |
 | `dropdown` | Boolean | <ul><li>Include a dropdown button to the right of the input box</li><li>*AVWC* will wire the **fill-list** function to fire on an empty search term box (i.e. min-chars == 0)<ul><li>**An empty search case must be handled for a reasonable combobox UX**</li></ul></li><li>By default, the button content is a down arrow &#x25BE; (*&amp;#x25BE;*) character<ul><li>A [slot named "dropdown"](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) can be used to override the default down arrow</li></ul></li></ul> |
 | `drop-down-css-class` | String | One or more CSS classes to add to the drop-down button |
@@ -99,7 +99,7 @@ The following props are recognized by *AVWC*.
 | `input-css-class` | String | One or more CSS classes to add to the text input element |
 | `ms-throttle` | Number | <ul><li>Adds an active-typing delay - in milliseconds - to the data source evaluation</li><li>default: **200** milliseconds</li></ul> |
 | `placeholder` | <ul><li>String</li><li>Boolean</li></ul> | <ul><li>Set placeholder text for the text input element</li><li>Using the token **{minChars}** in the string will replace it with `min-chars` value + "characters"</li><li>*false*, an empty string, or leaving this unset with `min-chars` == **0** will hide the placeholder</li><li>*true* will show the default placeholder even if `min-chars` == **0**</li><li>default: **Enter at least {minChars} to search**</li></ul> |
-| `replace-selection-with-label` | Boolean | <ul><li>Use the `label` property on the selected suggestion to replace the typed search term<ul><li>Awesomplete default is to use the `value` property</li></ul></li><li>Assumes a `{ label, value }` object is used for the suggestions</li><li>Will be overridden by `clear-on-close`</li><li>Ignored if a `replace` function is defined</li></ul> |
+| `replace-selection-with` | String | <ul><li>Specify a property to use on the selected suggestion to replace the typed search term when the *selectcomplete* event fires<ul><li>Awesomplete default is to use the `value` property</li></ul></li><li>Using an empty string (or just setting `replace-selection-with` as a value-less attribute) will assign the "label" property<ul><li>I.e. using a `{ label, value }` object for the suggestions as in the Awesomplete documentation</li></ul></li><li>`null` is the equivalent of setting the `clear-on-close` flag</li><li>Setting `clear-on-close` will take precedence over any value for `replace-selection-with`</li><li>Ignored if a `replace` function is defined</li></ul> |
 | `striped` | Boolean | Add a *.striped* CSS class to Awesomplete with a default striping color scheme applied |
 
 

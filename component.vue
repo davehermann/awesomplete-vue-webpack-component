@@ -37,7 +37,7 @@
             // Default typing throttle before calling fillList
             msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
             placeholder: { type: [Boolean, String], required: false, default: undefined },          // Placeholder to show in the input field
-            replaceSelectionWithLabel: { type: Boolean, required: false, default: false },          // Built-in function for replacing a selection with the text of an option instead of value
+            replaceSelectionWith: { type: String, required: false, default: undefined },          // Built-in function for replacing a selection with the text of an option instead of value
             striped: { type: Boolean, required: false, default: undefined },        // Applies a default striping class to every other item in the displayed list
 
             // Awesomplete options
@@ -110,6 +110,29 @@
 
                 return null;
             },
+
+            // Replace the text element with specific text data after a selection has been made
+            replaceSelection () {
+                // Warn if both clearOnClose and replaceSelectionWith are set
+                if ((this.clearOnClose !== undefined) && (this.clearOnClose !== false) && (this.replaceSelectionWith !== undefined))
+                    // eslint-disable-next-line no-console
+                    console.error("awesomplete-vue-webpack-component Warning: 'clear-on-close' and 'replace-selection-with' are both set; 'clear-on-close' takes precedence");
+
+                // Is nothing if a replace() function has been passed in
+                if (!!this.replace)
+                    return undefined;
+
+                // Setting "clear-on-close" is identical to setting replaceSelectionWith == null
+                if ((this.clearOnClose !== undefined) && (this.clearOnClose !== false))
+                    return null;
+
+                // By design, an empty string will be converted to "label" an be assumed to be the text property on a suggestion object
+                if (this.replaceSelectionWith === "")
+                    return "label";
+
+                // Any other case, return the passed in prop (or the default value)
+                return this.replaceSelectionWith;
+            },
         },
 
         watch: {
@@ -175,16 +198,12 @@
                 inputSearchTerm.addEventListener("awesomplete-selectcomplete", (evt) => {
                     this.$emit("selectcomplete", evt);
 
-                    // Optionally set the input search term to the label instead of the value after selection
-                    if (!this.replace && (this.replaceSelectionWithLabel !== undefined) && (this.replaceSelectionWithLabel !== false) && !!evt.text && !!evt.text.label) {
+                    // Set the text input value to a desired value after selection if it's null (clear it) or if the value is a property on the text object
+                    // Any other case will be handled by the default, or a passed in, replace()
+                    if ((this.replaceSelection === null) || ((typeof this.replaceSelection === "string") && (this.replaceSelection.length > 0) && !!evt.text[this.replaceSelection])) {
                         this.textSetInternally = true;
-                        this.autocompleteText = evt.text.label;
-                    }
 
-                    // Optionally clear the input search term after selection
-                    if (!this.replace && (this.clearOnClose !== undefined) && (this.clearOnClose !== false)) {
-                        this.textSetInternally = true;
-                        this.autocompleteText = null;
+                        this.autocompleteText = (this.replaceSelection === null) ? null : evt.text[this.replaceSelection];
                     }
                 });
 
