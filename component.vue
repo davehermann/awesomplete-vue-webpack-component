@@ -33,6 +33,7 @@
             // fillList MUST return a promise with an availableOptions array (see below)
             fillList: { type: [Function, Array, String], required: true, default: undefined },       // Promise that returns data source for awesomplete
             initialText: { type: String, required: false, default: undefined },     // Text to initially fill the text input box with
+            initialTextEvaluate: { type: Boolean, default: false },                 // Evalute the initial text against the data source whenever initialText is set
             inputCssClass: { type: String, required: false, default: undefined },   // String value with CSS class(es) to apply to input element
             // Default typing throttle before calling fillList
             msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
@@ -150,7 +151,7 @@
             initialText (val) {
                 // Ignore if any value has been entered into the text input
                 if (!!val && (this.autocompleteText === null)) {
-                    this.textSetInternally = true;
+                    this.textSetInternally = !this.initialTextEvaluate;
                     this.autocompleteText = val;
                 }
             },
@@ -165,8 +166,10 @@
             // Autocomplete initialization
             ActivateAutocomplete () {
                 // Initialization text available at mount
-                if (!!this.initialText)
+                if (!!this.initialText) {
+                    this.textSetInternally = !this.initialTextEvaluate;
                     this.autocompleteText = this.initialText;
+                }
 
                 // Get the input object
                 let inputSearchTerm = this.$refs.searchTermEntry;
