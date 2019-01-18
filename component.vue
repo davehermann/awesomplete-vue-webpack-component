@@ -5,6 +5,7 @@
             v-model="autocompleteText"
             :placeholder="placeholderDisplayed"
             :class="inputCssClass"
+            type="text"
             class="avwc-entry"
             />
         <button

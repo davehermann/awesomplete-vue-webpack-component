@@ -131,7 +131,7 @@ All five currently existing Awesomplete events are mapped to the VueJS event emi
 ## Styling
 
 *AVWC* provides CSS classes on its UI elements
-+ *AVWC* is wrapped in a ```span``` with an ```.avwc-container``` class
++ *AVWC* is wrapped in a ```<span />``` with an ```.avwc-container``` class
 + The input element has an ```.avwc-entry``` class
 + The drop-down button has an ```.avwc-dropdown``` class
 
