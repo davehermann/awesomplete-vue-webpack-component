@@ -33,8 +33,9 @@
             dropDownCssClass: { type: String, required: false, default: undefined },     // String value with CSS class(es) to apply to drop-down button
             // fillList MUST return a promise with an availableOptions array (see below)
             fillList: { type: [Function, Array, String], required: true, default: undefined },       // Promise that returns data source for awesomplete
-            initialText: { type: String, required: false, default: undefined },     // Text to initially fill the text input box with
-            initialTextEvaluate: { type: Boolean, default: false },                 // Evalute the initial text against the data source whenever initialText is set
+            initialText: { type: String, required: false, default: undefined },                 // Text to initially fill the text input box with
+            initialTextEvaluate: { type: Boolean, required: false, default: false },            // Evalute the initial text against the data source whenever initialText is set
+            initialTextSelect: { type: [Boolean, String], required: false, default: false },    // Select the first item on the list that is evaluated
             inputCssClass: { type: String, required: false, default: undefined },   // String value with CSS class(es) to apply to input element
             // Default typing throttle before calling fillList
             msThrottle: { type: Number, required: false, default: 200 },            // Typing throttle in milliseconds before fillList is called
@@ -68,6 +69,13 @@
 
                 // The Awesomplete object needs to be a property in the Vue instance
                 awesompleteObject: null,
+
+                // Handle initial text/selection configuration
+                initial: {
+                    text: null,
+                    evaluate: false,
+                    selectText: false,
+                },
 
                 // Flag to track whether we're setting the text in the component, and not to evaluate through Awesomplete
                 textSetInternally: false,
@@ -150,16 +158,21 @@
 
             // Initialization text available after mount
             initialText (val) {
+                // Always set the initial text data
+                this.initial.text = val;
+
                 // Ignore if any value has been entered into the text input
                 if (!!val && (this.autocompleteText === null)) {
-                    this.textSetInternally = !this.initialTextEvaluate;
+                    this.textSetInternally = !this.initial.evaluate;
                     this.autocompleteText = val;
                 }
             },
         },
 
         mounted: function() {
-            // Activate Awesomplete at mout
+            this.InitialState();
+
+            // Activate Awesomplete at mount
             this.ActivateAutocomplete();
         },
 
@@ -167,9 +180,9 @@
             // Autocomplete initialization
             ActivateAutocomplete () {
                 // Initialization text available at mount
-                if (!!this.initialText) {
-                    this.textSetInternally = !this.initialTextEvaluate;
-                    this.autocompleteText = this.initialText;
+                if (!!this.initial.text) {
+                    this.textSetInternally = !this.initial.evaluate;
+                    this.autocompleteText = this.initial.text;
                 }
 
                 // Get the input object
@@ -221,6 +234,62 @@
                 // Emit the reference to the input element and drop-down button
                 this.$emit("ref-input", this.$refs.searchTermEntry);
                 this.$emit("ref-dropdown-button", this.$refs.dropDownButton);
+
+                // Handle the initial selection when initialTextSelect is true
+                if (this.initial.selectText)
+                    this.AutoselectInitialText();
+            },
+
+            // Automatically select the first element when initially setting text
+            AutoselectInitialText () {
+                let inputBox = this.$refs.searchTermEntry;
+
+                // Add a listener to the open event
+                let onInitialOpen = () => {
+                    // Wait one tick for all Vue events to wire
+                    this.$nextTick()
+                        .then(() => {
+                            // Remove the open event listener as it should only run once
+                            inputBox.removeEventListener("awesomplete-open", onInitialOpen);
+
+                            // Add a listener to the selectcomplete event
+                            let onSelect = () => {
+                                // Remove the selectcomplete event listener as it should only run once
+                                inputBox.removeEventListener("awesomplete-selectcomplete", onSelect);
+
+                                // Set the text in the box to the text passed in
+                                inputBox.value = this.initial.text;
+                            };
+                            inputBox.addEventListener("awesomplete-selectcomplete", onSelect);
+
+                            // Highlight the first item in the evaluated list
+                            this.awesompleteObject.next();
+                            // Select the highlighted item
+                            this.awesompleteObject.select();
+                        });
+                };
+                inputBox.addEventListener("awesomplete-open", onInitialOpen);
+            },
+
+            InitialState () {
+                this.initial.text = this.initialText;
+                this.initial.evaluate = this.initialTextEvaluate;
+
+                // initialTextSelect automatically sets initialTextEvaluate to true, and - if it's a string - initial text
+                if (this.initialTextSelect !== undefined) {
+                    this.initial.evaluate = true;
+
+                    if (typeof this.initialTextSelect == "string") {
+                        // Warn if this is a string, and initialText is also set
+                        if (!!this.initial.text)
+                            // eslint-disable-next-line no-console
+                            console.error("awesomplete-vue-webpack-component Warning: 'initial-text-select' is a string and 'initial-text' is also set; 'initial-text-select' takes precedence");
+
+                        this.initial.text = this.initialTextSelect;
+                        this.initial.selectText = true;
+                    } else
+                        this.initial.selectText = this.initialTextSelect;
+                }
             },
 
             // Refresh source data
@@ -274,7 +343,7 @@
             WireDropDown () {
                 let buttonDropDown = this.$refs.dropDownButton;
 
-                buttonDropDown.addEventListener("click", (evt) => {
+                buttonDropDown.addEventListener("click", () => {
                     if (this.awesompleteObject.ul.childNodes.length === 0) {
                         this.awesompleteObject.minChars = 0;
 
